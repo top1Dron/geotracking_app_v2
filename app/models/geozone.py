@@ -11,19 +11,7 @@ from app.db import Base
 
 
 class Geozone(Base):
-    """Database model for user geozone.
-    
-    Fields:
-    id
-    user_id
-    name
-    latitude
-    longitude
-    radius_meters
-    center
-    created_at
-    updated_at
-    """
+    """Database model for user geozone."""
     
     __tablename__ = "geozones"
     
