@@ -20,6 +20,21 @@ class GeozoneCreate(BaseModel):
     )
 
 
+class GeozoneUpdate(BaseModel):
+    """Schema for updating Geozone."""
+    
+    name: str | None = Field(default=None, min_length=1, max_length=255)
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    longitude: float | None = Field(default=None, ge=-180, le=180)
+    radius_meters: Decimal | None = Field(
+        default=None,
+        ge=Decimal("1.00"),
+        le=Decimal("50000.00"),
+        decimal_places=2,
+        description="Geozone radius in meters [1 до 50000]",
+    )
+
+
 class GeozoneRead(BaseModel):
     """Schema for returning Geozone data from DB."""
     
