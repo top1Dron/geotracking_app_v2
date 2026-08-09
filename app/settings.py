@@ -30,6 +30,8 @@ class Config(BaseSettings):
     INGEST_CONCURRENCY: int = 100
     LOCATION_MAX_AGE_SECONDS: int = 10
     WS_LOCATION_MIN_INTERVAL_MS: int = 200
+    
+    API_VERSION: str = "/api/v1"
 
 
 config = Config()

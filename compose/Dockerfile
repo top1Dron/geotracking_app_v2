@@ -12,6 +12,8 @@ RUN uv sync --frozen --no-dev
 
 COPY app /app/app
 COPY frontend /app/frontend
+COPY alembic.ini /app/alembic.ini
+COPY alembic /app/alembic
 COPY compose/entrypoint.sh /app/compose/entrypoint.sh
 
 RUN chmod +x /app/compose/entrypoint.sh \

@@ -45,11 +45,16 @@ function initializeMap() {
       showAlert("Set User ID before creating geozones.");
       return;
     }
+    const radiusMeters = Number(radiusInput.value || 500);
+    if (!Number.isFinite(radiusMeters) || radiusMeters < 1 || radiusMeters > 50000) {
+      showAlert("Radius must be between 1.00 and 50000.00 meters.");
+      return;
+    }
     const payload = {
       name: `Zone ${new Date().toISOString()}`,
       latitude: event.latlng.lat,
       longitude: event.latlng.lng,
-      radius_meters: Number(radiusInput.value || 500),
+      radius_meters: radiusMeters.toFixed(2),
     };
     await fetch("/api/v1/geozones", {
       method: "POST",
@@ -84,7 +89,7 @@ async function loadGeozones(shouldSetInitialView = false) {
   }
   zones.forEach((zone) => {
     const circle = L.circle([zone.latitude, zone.longitude], {
-      radius: zone.radius_meters,
+      radius: Number(zone.radius_meters),
       color: "#4f7cff",
       fillOpacity: 0.15,
     }).addTo(map);
@@ -124,7 +129,7 @@ function createGeozonePopupElement(geozone, circle) {
   wrapper.appendChild(title);
 
   const details = document.createElement("div");
-  details.textContent = `${Math.round(geozone.radius_meters)}m`;
+  details.textContent = `${Number(geozone.radius_meters).toFixed(2)}m`;
   wrapper.appendChild(details);
 
   const removeButton = document.createElement("button");

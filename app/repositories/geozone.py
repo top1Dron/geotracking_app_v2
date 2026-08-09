@@ -20,10 +20,10 @@ class GeozoneRepository:
             name=payload.name,
             latitude=payload.latitude,
             longitude=payload.longitude,
-            radius=payload.radius_meters,
-            center=WKTElement(f"POINT({payload.longitude}{payload.latitude})", srid=4326)
+            radius_meters=payload.radius_meters,
+            center=WKTElement(f"POINT({payload.longitude} {payload.latitude})", srid=4326)
         )
-        await self.session.add(geozone)
+        self.session.add(geozone)
         await self.session.commit()
         await self.session.refresh(geozone)
         return geozone
