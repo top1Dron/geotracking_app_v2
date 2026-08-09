@@ -24,7 +24,7 @@ class LocationProcessingService:
         self._session_factory = SessionLocal
     
     # region process ingest message
-    async def process_ingest_message(self, message: dict):
+    async def process_ingest_message(self, message: dict) -> None:
         """Process ingest message from the ingest flow."""
         locations = self._extract_locations(message)
         batch_results = await asyncio.gather(
@@ -77,11 +77,11 @@ class LocationProcessingService:
         return age_seconds > self._location_max_age_seconds
     
     def _extract_locations(self, message: dict) -> list[LocationIn]:
+        """Normalize ingest payloads into LocationIn models."""
         if "locations" in message:
             return [
-                LocationIn.model_(location_data)
-                for location_data
-                in message["locations"]
+                LocationIn.model_validate(location_data)
+                for location_data in message["locations"]
             ]
-        return LocationIn.model_validate_json(message)
+        return [LocationIn.model_validate(message)]
     # endregion helpers

@@ -33,7 +33,7 @@ class SpatialQueryRepository:
                 Geozone.id, Geozone.user_id, Geozone.name
             )
             .where(
-                func.ST_Within(
+                func.ST_DWithin(
                     Geozone.center,
                     point,
                     Geozone.radius_meters
