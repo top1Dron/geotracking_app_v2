@@ -1,15 +1,16 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import pytest
 
 from app.schemas.location import LocationIn
-from app.services.location_batch_processing_service import LocationBatchProcessingService
+from app.services.location_processing_service import LocationProcessingService
 
 
 @pytest.mark.asyncio
 async def test_process_location_skips_stale_payload_without_db(monkeypatch) -> None:
     """Stale payload should be skipped before DB session is opened."""
-    service = LocationBatchProcessingService()
+    service = LocationProcessingService()
     monkeypatch.setattr(service, "_location_max_age_seconds", 1)
 
     opened_session = False
@@ -30,7 +31,7 @@ async def test_process_location_skips_stale_payload_without_db(monkeypatch) -> N
         device_id="device-stale",
         latitude=50.45,
         longitude=30.52,
-        timestamp=datetime.now(timezone.utc) - timedelta(seconds=5),
+        timestamp=datetime.now(ZoneInfo("Europe/Kyiv")) - timedelta(seconds=5),
     )
 
     result = await service._process_location(stale_location)

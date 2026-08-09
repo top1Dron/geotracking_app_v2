@@ -30,7 +30,7 @@ def test_ingest_single_location_publishes_once(client) -> None:
             "device_id": "device-1",
             "latitude": 50.45,
             "longitude": 30.52,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(ZoneInfo("Europe/Kyiv")).isoformat(),
         },
     )
 
@@ -52,13 +52,13 @@ def test_ingest_batch_locations_publishes_for_each(client) -> None:
                 "device_id": "device-1",
                 "latitude": 50.45,
                 "longitude": 30.52,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(ZoneInfo("Europe/Kyiv")).isoformat(),
             },
             {
                 "device_id": "device-2",
                 "latitude": 50.46,
                 "longitude": 30.53,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(ZoneInfo("Europe/Kyiv")).isoformat(),
             },
         ],
     )

@@ -9,7 +9,7 @@ class AlertService:
     def __init__(self, spatial_repository: SpatialQueryRepository) -> None:
         self._spatial_repository = spatial_repository
     
-    async def match_locations(self, location: LocationIn) -> list[GeozoneHit]:
+    async def match_location(self, location: LocationIn) -> list[GeozoneHit]:
         """Find geozones that contain the provided location."""
         return await self._spatial_repository.find_hits_for_location(location)
     
@@ -19,7 +19,7 @@ class AlertService:
         return AlertEvent(
             user_id=hit.user_id,
             device_id=hit.location.device_id,
-            geozone_id=hit.geozone_id,
+            geozone_id=str(hit.geozone_id),
             geozone_name=hit.geozone_name,
             latitude=hit.location.latitude,
             longitude=hit.location.longitude,

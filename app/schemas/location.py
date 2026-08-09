@@ -17,13 +17,19 @@ class LocationIn(BaseModel):
     )
 
 
+class LocationEvent(LocationIn):
+    """Schema for broadcasting location events."""
+
+    type: Literal["location"] = "location"
+
+
 class AlertEvent(BaseModel):
     """Schema for broadcasting geozone alert events."""
 
     type: Literal["alert"] = "alert"
     user_id: str
     device_id: str
-    geozone_id: UUID
+    geozone_id: str
     geozone_name: str
     latitude: float
     longitude: float

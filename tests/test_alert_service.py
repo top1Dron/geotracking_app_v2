@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 import pytest
 
@@ -26,7 +27,7 @@ async def test_match_location_returns_hits() -> None:
         device_id="device-1",
         latitude=50.45,
         longitude=30.52,
-        timestamp=datetime.now(timezone.utc),
+        timestamp=datetime.now(ZoneInfo("Europe/Kyiv")),
     )
     hit = GeozoneHit(
         user_id="user-1",
@@ -47,7 +48,7 @@ def test_build_alert_maps_hit_to_payload() -> None:
         device_id="device-1",
         latitude=50.45,
         longitude=30.52,
-        timestamp=datetime.now(timezone.utc),
+        timestamp=datetime.now(ZoneInfo("Europe/Kyiv")),
     )
     hit = GeozoneHit(
         user_id="user-1",

@@ -1,6 +1,8 @@
-from datetime import datetime, timezone
+from datetime import datetime
+from decimal import Decimal
 from types import SimpleNamespace
 from uuid import uuid4
+from zoneinfo import ZoneInfo
 
 import pytest
 
@@ -44,7 +46,7 @@ async def test_create_for_user_uses_sync_add_and_commits() -> None:
         name="Zone A",
         latitude=50.45,
         longitude=30.52,
-        radius_meters=1000,
+        radius_meters=Decimal(1000),
     )
 
     created = await repository.create_for_user("user-1", payload)
@@ -66,16 +68,16 @@ async def test_update_for_user_changes_fields_and_commits(monkeypatch) -> None:
         name="Old",
         latitude=50.45,
         longitude=30.52,
-        radius_meters=500,
+        radius_meters=Decimal(500),
         center=None,
-        created_at=datetime.now(timezone.utc),
+        created_at=datetime.now(ZoneInfo("Europe/Kyiv")),
     )
 
-    async def fake_get_for_user(user_id: str, geozone_id):
+    async def fake_get_user_geozone(user_id: str, geozone_id):
         return geozone
 
-    monkeypatch.setattr(repository, "get_for_user", fake_get_for_user)
-    payload = GeozoneUpdate(name="New", latitude=50.5, longitude=30.6, radius_meters=900)
+    monkeypatch.setattr(repository, "get_user_geozone", fake_get_user_geozone)
+    payload = GeozoneUpdate(name="New", latitude=50.5, longitude=30.6, radius_meters=Decimal(900))
 
     updated = await repository.update_for_user("user-1", geozone.id, payload)
 
@@ -95,10 +97,10 @@ async def test_delete_for_user_returns_false_when_missing(monkeypatch) -> None:
     session = FakeSession()
     repository = GeozoneRepository(session=session)  # type: ignore[arg-type]
 
-    async def fake_get_for_user(user_id: str, geozone_id):
+    async def fake_get_user_geozone(user_id: str, geozone_id):
         return None
 
-    monkeypatch.setattr(repository, "get_for_user", fake_get_for_user)
+    monkeypatch.setattr(repository, "get_user_geozone", fake_get_user_geozone)
 
     deleted = await repository.delete_for_user("user-1", uuid4())
 
@@ -114,10 +116,10 @@ async def test_delete_for_user_deletes_and_commits(monkeypatch) -> None:
     repository = GeozoneRepository(session=session)  # type: ignore[arg-type]
     geozone = SimpleNamespace(id=uuid4(), user_id="user-1")
 
-    async def fake_get_for_user(user_id: str, geozone_id):
+    async def fake_get_user_geozone(user_id: str, geozone_id):
         return geozone
 
-    monkeypatch.setattr(repository, "get_for_user", fake_get_for_user)
+    monkeypatch.setattr(repository, "get_user_geozone", fake_get_user_geozone)
 
     deleted = await repository.delete_for_user("user-1", geozone.id)
 

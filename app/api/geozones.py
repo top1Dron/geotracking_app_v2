@@ -60,7 +60,7 @@ async def create_geozone(
     return GeozoneRead.model_validate(geozone)
 
 
-@geozone_router.put(
+@geozone_router.patch(
     "/{geozone_id}",
     response_model=GeozoneRead,
     status_code=status.HTTP_200_OK,

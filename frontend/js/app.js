@@ -19,7 +19,7 @@ function getUserId() {
 function headers() {
   return {
     "Content-Type": "application/json",
-    "X-User-Id": getUserId(),
+    "x-user-id": getUserId(),
   };
 }
 

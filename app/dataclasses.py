@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from app.schemas.location import LocationIn
+from app.schemas.location import AlertEvent, LocationEvent, LocationIn
 
 
 @dataclass(slots=True)
@@ -12,3 +12,11 @@ class GeozoneHit:
     geozone_id: UUID
     geozone_name: str
     location: LocationIn
+
+
+@dataclass(slots=True)
+class ProcessLocationResult:
+    """Result container for one processed location payload."""
+
+    location_event: LocationEvent | None
+    alert_events: list[AlertEvent]
